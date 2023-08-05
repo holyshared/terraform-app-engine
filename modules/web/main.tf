@@ -106,3 +106,13 @@ resource "google_project_iam_member" "secretmanager_secret_accessor" {
     module.project
   ]
 }
+
+resource "google_project_iam_member" "appengine_deployer" {
+  project = module.project.project_id
+  role    = "roles/appengine.deployer"
+  member  = "serviceAccount:${module.project.project_number}@cloudbuild.gserviceaccount.com"
+
+  depends_on = [
+    module.project
+  ]
+}
