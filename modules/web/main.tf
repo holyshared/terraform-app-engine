@@ -18,6 +18,7 @@ module "project" {
   folder_id         = var.folder_id
   billing_account   = var.billing_account
   activate_apis = [
+    "appengine.googleapis.com",
     "iam.googleapis.com",
     "cloudbuild.googleapis.com",
     "secretmanager.googleapis.com",
