@@ -116,3 +116,13 @@ resource "google_project_iam_member" "appengine_deployer" {
     module.project
   ]
 }
+
+resource "google_project_iam_member" "appengine_service_account_user" {
+  project = module.project.project_id
+  role    = "roles/iam.serviceAccountUser"
+  member  = "serviceAccount:${module.project.project_number}@cloudbuild.gserviceaccount.com"
+
+  depends_on = [
+    module.project
+  ]
+}
