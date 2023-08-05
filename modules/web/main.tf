@@ -73,6 +73,11 @@ resource "google_project_iam_member" "log_writers" {
   member  = google_logging_project_sink.sink_logs[count.index].writer_identity
 }
 
+resource "google_app_engine_application" "app" {
+  project  = module.project.project_id
+  location_id = var.region
+}
+
 resource "google_cloudbuild_trigger" "web_branch_build" {
   project  = module.project.project_id
   name     = "example"
