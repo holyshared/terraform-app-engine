@@ -97,29 +97,10 @@ resource "google_cloudbuild_trigger" "web_branch_build" {
   }
 }
 
-resource "google_project_iam_member" "secretmanager_secret_accessor" {
+resource "google_project_iam_member" "cloud_build_roles" {
+  count = length(local.cloud_build_roles)
   project = module.project.project_id
-  role    = "roles/secretmanager.secretAccessor"
-  member  = "serviceAccount:${module.project.project_number}@cloudbuild.gserviceaccount.com"
-
-  depends_on = [
-    module.project
-  ]
-}
-
-resource "google_project_iam_member" "appengine_app_admin" {
-  project = module.project.project_id
-  role    = "roles/appengine.appAdmin"
-  member  = "serviceAccount:${module.project.project_number}@cloudbuild.gserviceaccount.com"
-
-  depends_on = [
-    module.project
-  ]
-}
-
-resource "google_project_iam_member" "appengine_service_account_user" {
-  project = module.project.project_id
-  role    = "roles/iam.serviceAccountUser"
+  role    = local.cloud_build_roles[count.index]
   member  = "serviceAccount:${module.project.project_number}@cloudbuild.gserviceaccount.com"
 
   depends_on = [
