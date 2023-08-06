@@ -23,7 +23,8 @@ module "project" {
     "cloudbuild.googleapis.com",
     "secretmanager.googleapis.com",
     "bigquery.googleapis.com",
-    "domains.googleapis.com"
+    "domains.googleapis.com",
+    "iap.googleapis.com"
   ]
 }
 
