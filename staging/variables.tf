@@ -27,6 +27,10 @@ variable "oauth_support_email" {
   description = "support email for IAP"
 }
 
+variable "iap_workspace_domain" {
+  description = "Google Workspace Domain for IAP"
+}
+
 variable "env_secret_variables" {
   type = list(object({
     env_name  = string

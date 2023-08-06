@@ -93,12 +93,28 @@ resource "google_iap_client" "project_client" {
   brand        =  google_iap_brand.project_brand.name
 }
 
+resource "google_iap_web_type_app_engine_iam_policy" "app_engine_iap_policy" {
+  project = google_project_service.project_service.project
+  app_id = google_app_engine_application.app.app_id
+  policy_data = data.google_iam_policy.internal_policy.policy_data
+}
+
+data "google_iam_policy" "internal_policy" {
+  binding {
+    role = "roles/iap.httpsResourceAccessor"
+    members = [
+      "domain:${var.iap_workspace_domain}",
+    ]
+  }
+}
+
 // App Engine
 resource "google_app_engine_application" "app" {
   project  = module.project.project_id
   location_id = var.region
 
   iap {
+    enabled              = true
     oauth2_client_id = google_iap_client.project_client.client_id
     oauth2_client_secret = google_iap_client.project_client.secret
   }
