@@ -23,8 +23,7 @@ module "project" {
     "cloudbuild.googleapis.com",
     "secretmanager.googleapis.com",
     "bigquery.googleapis.com",
-    "cloudbuild.googleapis.com",
-    "secretmanager.googleapis.com"
+    "domains.googleapis.com"
   ]
 }
 
@@ -77,6 +76,15 @@ resource "google_project_iam_member" "log_writers" {
 resource "google_app_engine_application" "app" {
   project  = module.project.project_id
   location_id = var.region
+}
+
+resource "google_app_engine_domain_mapping" "default" {
+  project  = module.project.project_id
+  domain_name = var.domain
+
+  ssl_settings {
+    ssl_management_type = "AUTOMATIC"
+  }
 }
 
 resource "google_cloudbuild_trigger" "web_branch_build" {
