@@ -74,9 +74,37 @@ resource "google_project_iam_member" "log_writers" {
   member  = google_logging_project_sink.sink_logs[count.index].writer_identity
 }
 
+// IAP
+resource "google_project_service" "project_service" {
+  project = module.project.project_id
+  service = "iap.googleapis.com"
+}
+
+// 定義できるのは、内部クライアントのみらしい
+// https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/iap_client
+resource "google_iap_brand" "project_brand" {
+  project           = google_project_service.project_service.project
+  application_title = "Cloud IAP protected Application"
+  support_email     = var.oauth_support_email
+}
+
+resource "google_iap_client" "project_client" {
+  display_name = "Test Client"
+  brand        =  google_iap_brand.project_brand.name
+}
+
+// App Engine
 resource "google_app_engine_application" "app" {
   project  = module.project.project_id
   location_id = var.region
+
+  iap {
+    oauth2_client_id = google_iap_client.project_client.client_id
+    oauth2_client_secret = google_iap_client.project_client.secret
+  }
+  depends_on = [
+    google_iap_client.project_client
+  ]
 }
 
 resource "google_app_engine_domain_mapping" "default" {

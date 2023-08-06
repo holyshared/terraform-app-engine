@@ -10,6 +10,7 @@ module "web" {
 
   build_branch = "^develop$"
   domain       = var.domain
+  oauth_support_email     = var.oauth_support_email
 
   env_variables        = var.env_variables
   env_secret_variables = var.env_secret_variables

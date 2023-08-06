@@ -32,6 +32,10 @@ variable "domain" {
   description = "domain"
 }
 
+variable "oauth_support_email" {
+  description = "support email for IAP"
+}
+
 variable "env_secret_variables" {
   type = list(object({
     env_name = string
